@@ -179,6 +179,7 @@ Then follow these settings:
 Project name: student-portal-build
 
 Which build: Latest successful build
+build/**
 
 Target directory: leave blank (or .)
 
