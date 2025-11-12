@@ -4,6 +4,66 @@ chmod 400 your-key.pem
 ssh -i "your-key.pem" ubuntu@<EC2-Public-IP>
 or
 cd Desktop
-ssh -i "C:\Users\sadha\Downloads\jenkins-server.pem" ubuntu@<EC2-Public-IP>
----Ternimal----
+ssh -i "your-key.pem" ubuntu@<public-ip>
+
+---Install java---
+sudo apt update -y
+sudo apt install -y openjdk-17-jdk
+java -version
+
+--Install Jenkins----
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
+  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt update -y
+sudo apt install -y jenkins
+
+----Start Jenkins Service-----
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
+sudo systemctl status jenkins
+
+----Access Jenkins---
+http://<public-ip>:8080
+
+---Add Security Groups---
+Step to Add Jenkins Port Rule
+
+Click “Add rule”
+
+Set:
+
+Type: Custom TCP
+
+Protocol: TCP
+
+Port range: 8080
+
+Source: 0.0.0.0/0
+
+Click Save rules
+
+---Unlock Jenkins--
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+Copy that password → paste into browser → continue.
+
+Then:
+
+Click Install suggested plugins
+
+Create admin username + password
+
+Finish setup
+
+**Copy that password → paste it into your browser → complete setup.
+
+---Create Git Repo----
+
+
+
+
+
 
