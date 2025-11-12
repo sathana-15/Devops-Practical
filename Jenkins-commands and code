@@ -62,6 +62,157 @@ Finish setup
 
 ---Create Git Repo----
 
+----index.html---
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Portal</title>
+</head>
+<body style="font-family: Arial; text-align:center; margin-top:50px;">
+    <h1>Welcome to the Student Portal</h1>
+    <p>Version 1.0 - Auto CI/CD with Jenkins 🚀</p>
+</body>
+</html>
+
+--Jenkins file----
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building the project...'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                sh 'echo "All tests passed!"'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying application...'
+                sh '''
+                    # Create deploy directory
+                    mkdir -p /var/www/html
+                    # Copy files (assuming Jenkins has permissions)
+                    cp -r * /var/www/html/
+                '''
+                echo 'Deployment complete! Visit your EC2 Public IP to view the site.'
+            }
+        }
+    }
+}
+-----Creat jobs---
+
+JOB 1: Build
+
+Open Jenkins → New Item
+
+Enter name → student-portal-build
+
+Select → Freestyle project
+
+Click OK
+
+Now configure:
+
+Source Code Management → Git
+
+Repository URL → https://github.com/<your-username>/student-portal-ci-cd.git
+
+Branches to build → */main (or your branch name)
+
+Build Triggers →
+✅ Check: “GitHub hook trigger for GITScm polling”
+
+Build Steps →
+
+Click “Add build step” → “Execute shell”
+
+Paste:
+
+echo "Building Student Portal project..."
+mkdir -p build
+cp index.html build/
+echo "Build successful!"
+
+
+Post-build Actions →
+
+“Build other projects”
+
+Project to build → student-portal-test
+
+Trigger only if build is stable ✅
+
+Click Save
+
+---Create Test jobs---
+
+JOB 2: Test
+
+New Item → name: student-portal-test
+
+Type: Freestyle project
+
+Click OK
+
+Configure:
+
+Build Steps →
+
+“Execute shell”:
+
+echo "Running tests..."
+if grep -q "Student Portal" index.html; then
+  echo "Test Passed ✅"
+else
+  echo "Test Failed ❌"
+  exit 1
+fi
+
+
+Post-build Actions →
+
+“Build other projects”
+
+Project to build → student-portal-deploy
+
+Trigger only if build is stable ✅
+
+Click Save
+
+---Create deploy jobs--
+JOB 3: Deploy
+
+New Item → name: student-portal-deploy
+
+Type: Freestyle project
+
+Click OK
+
+Configure:
+
+Build Steps →
+
+“Execute shell”:
+
+echo "Deploying Student Portal..."
+sudo mkdir -p /var/www/html
+sudo cp index.html /var/www/html/
+echo "Deployment complete! Visit your EC2 public IP."
+
+
+Click Save
+
+---create webhook---
+
+
+
 
 
 
