@@ -1,1 +1,21 @@
+#!/bin/bash
+
+echo "Starting Git installation..." 
+echo "Git Installation Report - $(date)" > git_install_report.txt
+
+for i in {1..10}
+do
+  echo "Installing on system $i..."
+  sudo apt update -y &>/dev/null
+  sudo apt install git -y &>/dev/null
+
+  if git --version &>/dev/null; then
+    echo "System $i: Installed ($(git --version))" | tee -a git_install_report.txt
+  else
+    echo "System $i: Installation Failed" | tee -a git_install_report.txt
+  fi
+done
+
+echo -e "\nSummary:"
+cat git_install_report.txt
 
