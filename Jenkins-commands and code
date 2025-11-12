@@ -165,15 +165,24 @@ Configure:
 
 Build Steps →
 
-“Execute shell”:
+Step 2 — Return to Your Test Job
 
-echo "Running tests..."
-if grep -q "Student Portal" index.html; then
-  echo "Test Passed ✅"
-else
-  echo "Test Failed ❌"
-  exit 1
-fi
+Go back to student-portal-test → Configure
+
+Scroll to Build Steps
+
+Click Add build step → now you should see:
+👉 Copy artifacts from another project
+
+Then follow these settings:
+
+Project name: student-portal-build
+
+Which build: Latest successful build
+
+Target directory: leave blank (or .)
+
+After that, keep your test shell step below it.
 
 
 Post-build Actions →
@@ -210,7 +219,10 @@ echo "Deployment complete! Visit your EC2 public IP."
 Click Save
 
 ---create webhook---
+http://<your-ec2-public-ip>:8080/github-webhook/
+appl/jon-content
 
+---Make changes in code---
 
 
 
