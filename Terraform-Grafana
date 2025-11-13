@@ -1,1 +1,66 @@
+Step 1: first create one folder ,,inside that folder  create 2 files 
+1)docker-compose.yml
+2)prometheus.yml
 
+--------------------------------
+version: "3.8"
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090:9090"
+
+  nodeexporter:
+    image: prom/node-exporter:latest
+    pid: "host"
+    ports:
+      - "9100:9100"
+    restart: unless-stopped
+    # For simple lab use this is OK; for real host monitoring adjust mounts and security.
+
+  grafana:
+    image: grafana/grafana:latest
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+volumes:
+  grafana-storage:
+----------------------------------
+
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["prometheus:9090"]
+
+  - job_name: "node"
+    static_configs:
+      - targets: ["nodeexporter:9100"]
+---------------------------------------------------
+
+--commands--
+
+1)docker compose up -d
+  2) docker ps
+3)docker compose down
+
+---------------------------------
+step 3:
+open browser 
+1)  promethus:   http://localhost:9090
+in promethus->status->target health   ->it will show some endpoints
+2)grafana:  http://localhost:3000  
+     in grafana->connection->datasource->prometheus->in last save and apply
+        ->go to dashboard->import dashboard-> (Find and import dashboards for common applications at grafana.com/dashboards )-> give (1860)  
+     then click load
+then u can see a dashboard
