@@ -1,1 +1,87 @@
+note first install maven open powershell as admisistor  ->
+choco install maven -y
+Step 1 — Create a project folder manually
+cd C:\Users\rithi\Downloads
+mkdir demoapp
+cd demoapp
 
+Step 2 — Create folder structure
+mkdir -p src\main\java\com\example\demoapp
+mkdir -p src\main\webapp\WEB-INF
+
+Step 3 — Create a minimal pom.xml
+notepad pom.xml
+
+
+Paste this content and save:
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.example.demoapp</groupId>
+    <artifactId>demoapp</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <path>/</path>
+                    <port>8080</port>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
+
+Step 4 — Create a simple JSP
+notepad src\main\webapp\index.jsp
+
+
+Paste this:
+
+<h1>Welcome to Demo Web Project!</h1>
+<p>This is for my practical.</p>
+
+
+Save and close.
+
+Step 5 — Optional: Create a Java class
+notepad src\main\java\com\example\demoapp/App.java
+
+
+Paste:
+
+package com.example.demoapp;
+
+public class App {
+    public static void main(String[] args) {
+        System.out.println("Demo Web Project Running!");
+    }
+}
+
+Step 6 — Compile the project
+mvn compile
+
+Step 7 — Run the web project
+mvn tomcat7:run
+
+Step 8 — Open in browser
+
+Go to:
+
+http://localhost:8080/demoapp
+
+
+You’ll see:
+
+Welcome to Demo Web Project!
+This is for my practical.
